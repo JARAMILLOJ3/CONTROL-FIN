@@ -29,31 +29,43 @@ export const InvestorModal: React.FC<InvestorModalProps> = ({
   const [estado, setEstado] = useState<InvestorStatus>('Activo');
   const [notas, setNotas] = useState('');
 
+  const initializedForRef = React.useRef<string | null>(null);
+
   useEffect(() => {
-    if (investorToEdit) {
-      setInversionista(investorToEdit.inversionista);
-      setContacto(investorToEdit.contacto || '');
-      setFechaInicio(investorToEdit.fechaInicio);
-      setFechaVencimiento(investorToEdit.fechaVencimiento || '');
-      setMontoRecibido(String(investorToEdit.montoRecibido));
-      setAcuerdo(investorToEdit.acuerdo);
-      setTasaRetorno(investorToEdit.tasaRetorno || '');
-      setRetornoPactado(String(investorToEdit.retornoPactado));
-      setCuentaReceptora(investorToEdit.cuentaReceptora || configLists.cuentas[0] || 'Nu');
-      setEstado(investorToEdit.estado);
-      setNotas(investorToEdit.notas || '');
-    } else {
-      setInversionista('');
-      setContacto('');
-      setFechaInicio(getTodayDateString());
-      setFechaVencimiento('');
-      setMontoRecibido('');
-      setAcuerdo('');
-      setTasaRetorno('');
-      setRetornoPactado('');
-      setCuentaReceptora(configLists.cuentas[0] || 'Nu');
-      setEstado('Activo');
-      setNotas('');
+    if (!isOpen) {
+      initializedForRef.current = null;
+      return;
+    }
+
+    const currentKey = investorToEdit ? investorToEdit.id : 'new_investor';
+    if (initializedForRef.current !== currentKey) {
+      initializedForRef.current = currentKey;
+
+      if (investorToEdit) {
+        setInversionista(investorToEdit.inversionista);
+        setContacto(investorToEdit.contacto || '');
+        setFechaInicio(investorToEdit.fechaInicio);
+        setFechaVencimiento(investorToEdit.fechaVencimiento || '');
+        setMontoRecibido(String(investorToEdit.montoRecibido));
+        setAcuerdo(investorToEdit.acuerdo);
+        setTasaRetorno(investorToEdit.tasaRetorno || '');
+        setRetornoPactado(String(investorToEdit.retornoPactado));
+        setCuentaReceptora(investorToEdit.cuentaReceptora || configLists.cuentas[0] || 'Nu');
+        setEstado(investorToEdit.estado);
+        setNotas(investorToEdit.notas || '');
+      } else {
+        setInversionista('');
+        setContacto('');
+        setFechaInicio(getTodayDateString());
+        setFechaVencimiento('');
+        setMontoRecibido('');
+        setAcuerdo('');
+        setTasaRetorno('');
+        setRetornoPactado('');
+        setCuentaReceptora(configLists.cuentas[0] || 'Nu');
+        setEstado('Activo');
+        setNotas('');
+      }
     }
   }, [investorToEdit, isOpen, configLists]);
 

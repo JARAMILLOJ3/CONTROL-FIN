@@ -35,9 +35,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signInWithGoogle = async () => {
     try {
       setAuthError(null);
+      googleProvider.setCustomParameters({ prompt: 'select_account' });
       await signInWithPopup(auth, googleProvider);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Google Sign-in error:', err);
+      if (err?.code === 'auth/popup-closed-by-user') {
+        // User voluntarily dismissed popup
+        return;
+      }
+      if (err?.code === 'auth/popup-blocked') {
+        setAuthError('El navegador bloqueó la ventana emergente. Por favor habilita ventanas emergentes para este sitio.');
+        return;
+      }
       const message = err instanceof Error ? err.message : 'Error al iniciar sesión con Google';
       setAuthError(message);
     }

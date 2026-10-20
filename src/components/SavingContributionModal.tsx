@@ -32,21 +32,32 @@ export const SavingContributionModal: React.FC<SavingContributionModalProps> = (
   const [fecha, setFecha] = useState(new Date().toISOString().slice(0, 10));
   const [nota, setNota] = useState('');
 
+  const initializedForRef = React.useRef<boolean>(false);
+
   useEffect(() => {
-    if (defaultGoalId) {
-      setGoalId(defaultGoalId);
-    } else if (savings.length > 0 && !goalId) {
-      setGoalId(savings[0].id);
+    if (!isOpen) {
+      initializedForRef.current = false;
+      return;
     }
 
-    if (accounts.length > 0 && !cuentaOrigen) {
-      setCuentaOrigen(accounts[0].nombre);
-    }
+    if (!initializedForRef.current) {
+      initializedForRef.current = true;
 
-    setTipo(defaultType);
-    setMonto('');
-    setNota('');
-    setFecha(new Date().toISOString().slice(0, 10));
+      if (defaultGoalId) {
+        setGoalId(defaultGoalId);
+      } else if (savings.length > 0 && !goalId) {
+        setGoalId(savings[0].id);
+      }
+
+      if (accounts.length > 0) {
+        setCuentaOrigen(accounts[0].nombre);
+      }
+
+      setTipo(defaultType);
+      setMonto('');
+      setNota('');
+      setFecha(new Date().toISOString().slice(0, 10));
+    }
   }, [defaultGoalId, defaultType, isOpen, savings, accounts]);
 
   // Cerrar modal con Escape

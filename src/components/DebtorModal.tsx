@@ -29,31 +29,43 @@ export const DebtorModal: React.FC<DebtorModalProps> = ({
   const [estado, setEstado] = useState<DebtorStatus>('Pendiente');
   const [notas, setNotas] = useState('');
 
+  const initializedForRef = React.useRef<string | null>(null);
+
   useEffect(() => {
-    if (debtorToEdit) {
-      setDeudor(debtorToEdit.deudor);
-      setContacto(debtorToEdit.contacto || '');
-      setConcepto(debtorToEdit.concepto);
-      setFechaPrestamo(debtorToEdit.fechaPrestamo);
-      setFechaCompromiso(debtorToEdit.fechaCompromiso || '');
-      setMontoPrestado(String(debtorToEdit.montoPrestado));
-      setInteresPactado(debtorToEdit.interesPactado || 'Sin interés');
-      setTotalACobrar(String(debtorToEdit.totalACobrar));
-      setCuentaOrigen(debtorToEdit.cuentaOrigen || configLists.cuentas[0] || 'Nequi');
-      setEstado(debtorToEdit.estado);
-      setNotas(debtorToEdit.notas || '');
-    } else {
-      setDeudor('');
-      setContacto('');
-      setConcepto('');
-      setFechaPrestamo(getTodayDateString());
-      setFechaCompromiso('');
-      setMontoPrestado('');
-      setInteresPactado('Sin interés');
-      setTotalACobrar('');
-      setCuentaOrigen(configLists.cuentas[0] || 'Nequi');
-      setEstado('Pendiente');
-      setNotas('');
+    if (!isOpen) {
+      initializedForRef.current = null;
+      return;
+    }
+
+    const currentKey = debtorToEdit ? debtorToEdit.id : 'new_debtor';
+    if (initializedForRef.current !== currentKey) {
+      initializedForRef.current = currentKey;
+
+      if (debtorToEdit) {
+        setDeudor(debtorToEdit.deudor);
+        setContacto(debtorToEdit.contacto || '');
+        setConcepto(debtorToEdit.concepto);
+        setFechaPrestamo(debtorToEdit.fechaPrestamo);
+        setFechaCompromiso(debtorToEdit.fechaCompromiso || '');
+        setMontoPrestado(String(debtorToEdit.montoPrestado));
+        setInteresPactado(debtorToEdit.interesPactado || 'Sin interés');
+        setTotalACobrar(String(debtorToEdit.totalACobrar));
+        setCuentaOrigen(debtorToEdit.cuentaOrigen || configLists.cuentas[0] || 'Nequi');
+        setEstado(debtorToEdit.estado);
+        setNotas(debtorToEdit.notas || '');
+      } else {
+        setDeudor('');
+        setContacto('');
+        setConcepto('');
+        setFechaPrestamo(getTodayDateString());
+        setFechaCompromiso('');
+        setMontoPrestado('');
+        setInteresPactado('Sin interés');
+        setTotalACobrar('');
+        setCuentaOrigen(configLists.cuentas[0] || 'Nequi');
+        setEstado('Pendiente');
+        setNotas('');
+      }
     }
   }, [debtorToEdit, isOpen, configLists]);
 

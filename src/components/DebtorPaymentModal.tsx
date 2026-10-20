@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Check } from 'lucide-react';
 import { Debtor } from '../types/finance';
 import { useFinance } from '../context/FinanceContext';
@@ -21,6 +21,16 @@ export const DebtorPaymentModal: React.FC<DebtorPaymentModalProps> = ({
   const [metodo, setMetodo] = useState(configLists.metodosPago[0] || 'Nequi');
   const [cuentaDestino, setCuentaDestino] = useState(configLists.cuentas[0] || 'Nequi');
   const [nota, setNota] = useState('');
+
+  useEffect(() => {
+    if (isOpen) {
+      setFecha(getTodayDateString());
+      setMonto('');
+      setNota('');
+      if (configLists.metodosPago.length > 0) setMetodo(configLists.metodosPago[0]);
+      if (configLists.cuentas.length > 0) setCuentaDestino(configLists.cuentas[0]);
+    }
+  }, [isOpen]);
 
   if (!isOpen || !debtor) return null;
 

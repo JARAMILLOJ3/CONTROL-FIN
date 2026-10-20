@@ -36,37 +36,49 @@ export const BuyerSaleModal: React.FC<BuyerSaleModalProps> = ({
   const [notas, setNotas] = useState('');
   const [mostrarExplicacion, setMostrarExplicacion] = useState(false);
 
+  const initializedForRef = React.useRef<string | null>(null);
+
   useEffect(() => {
-    if (saleToEdit) {
-      setFecha(saleToEdit.fecha);
-      setComprador(saleToEdit.comprador);
-      setContacto(saleToEdit.contacto || '');
-      setProductoServicio(saleToEdit.productoServicio);
-      setMontoVendido(String(saleToEdit.montoVendido));
-      setCostoProducto(String(saleToEdit.costoProducto));
-      setCostoPagado(Boolean(saleToEdit.costoPagado));
-      setCuentaCosto(saleToEdit.cuentaCosto || accounts[0]?.nombre || 'Nequi');
-      setTieneAbonoInicial(false);
-      setMontoAbonoInicial('');
-      setCuentaAbono(accounts[0]?.nombre || 'Nequi');
-      setMetodoPago(saleToEdit.metodoPago || configLists.metodosPago[0] || 'Transferencia Bancaria');
-      setFechaLimite(saleToEdit.fechaLimite || '');
-      setNotas(saleToEdit.notas || '');
-    } else {
-      setFecha(getTodayDateString());
-      setComprador('');
-      setContacto('');
-      setProductoServicio('');
-      setMontoVendido('');
-      setCostoProducto('');
-      setCostoPagado(false);
-      setCuentaCosto(accounts[0]?.nombre || 'Nequi');
-      setTieneAbonoInicial(false);
-      setMontoAbonoInicial('');
-      setCuentaAbono(accounts[0]?.nombre || 'Nequi');
-      setMetodoPago(configLists.metodosPago[0] || 'Transferencia Bancaria');
-      setFechaLimite('');
-      setNotas('');
+    if (!isOpen) {
+      initializedForRef.current = null;
+      return;
+    }
+
+    const currentKey = saleToEdit ? saleToEdit.id : 'new_sale';
+    if (initializedForRef.current !== currentKey) {
+      initializedForRef.current = currentKey;
+
+      if (saleToEdit) {
+        setFecha(saleToEdit.fecha);
+        setComprador(saleToEdit.comprador);
+        setContacto(saleToEdit.contacto || '');
+        setProductoServicio(saleToEdit.productoServicio);
+        setMontoVendido(String(saleToEdit.montoVendido));
+        setCostoProducto(String(saleToEdit.costoProducto));
+        setCostoPagado(Boolean(saleToEdit.costoPagado));
+        setCuentaCosto(saleToEdit.cuentaCosto || accounts[0]?.nombre || 'Nequi');
+        setTieneAbonoInicial(false);
+        setMontoAbonoInicial('');
+        setCuentaAbono(accounts[0]?.nombre || 'Nequi');
+        setMetodoPago(saleToEdit.metodoPago || configLists.metodosPago[0] || 'Transferencia Bancaria');
+        setFechaLimite(saleToEdit.fechaLimite || '');
+        setNotas(saleToEdit.notas || '');
+      } else {
+        setFecha(getTodayDateString());
+        setComprador('');
+        setContacto('');
+        setProductoServicio('');
+        setMontoVendido('');
+        setCostoProducto('');
+        setCostoPagado(false);
+        setCuentaCosto(accounts[0]?.nombre || 'Nequi');
+        setTieneAbonoInicial(false);
+        setMontoAbonoInicial('');
+        setCuentaAbono(accounts[0]?.nombre || 'Nequi');
+        setMetodoPago(configLists.metodosPago[0] || 'Transferencia Bancaria');
+        setFechaLimite('');
+        setNotas('');
+      }
     }
   }, [saleToEdit, isOpen, configLists, accounts]);
 

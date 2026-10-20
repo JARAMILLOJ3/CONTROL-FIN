@@ -28,6 +28,8 @@ export const MovementModal: React.FC<MovementModalProps> = ({
   const [cuentaDestino, setCuentaDestino] = useState('');
   const [notas, setNotas] = useState('');
 
+  const initializedForRef = React.useRef<string | null>(null);
+
   // Close modal on Escape key press
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -40,45 +42,44 @@ export const MovementModal: React.FC<MovementModalProps> = ({
   }, [isOpen, onClose]);
 
   useEffect(() => {
-    if (movementToEdit) {
-      setFecha(movementToEdit.fecha);
-      setTipo(movementToEdit.tipo);
-      setCategoria(movementToEdit.categoria);
-      setConcepto(movementToEdit.concepto);
-      setMonto(String(movementToEdit.monto));
-      setCuenta(movementToEdit.cuenta);
-      setCuentaDestino(movementToEdit.cuentaDestino || '');
-      setNotas(movementToEdit.notas || '');
-    } else {
-      setFecha(getTodayDateString());
-      setTipo(defaultType);
-      if (defaultType === 'Ingreso') {
-        setCategoria(configLists.categoriasIngreso[0] || 'Salario / Nómina');
-      } else if (defaultType === 'Gasto') {
-        setCategoria(configLists.categoriasGasto[0] || 'Alimentación y Mercado');
-      } else if (defaultType === 'Ahorro') {
-        setCategoria('Ahorro Fondo');
-      } else {
-        setCategoria('Transferencia entre cuentas');
-      }
-      setConcepto('');
-      setMonto('');
-      setCuenta(configLists.cuentas[0] || 'Nequi');
-      setCuentaDestino(configLists.cuentas[1] || 'Nu');
-      setNotas('');
+    if (!isOpen) {
+      initializedForRef.current = null;
+      return;
     }
-  }, [movementToEdit, isOpen, configLists, defaultType]);
 
-  // Cerrar con Escape
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
+    const currentKey = movementToEdit ? movementToEdit.id : `new_${defaultType}`;
+    if (initializedForRef.current !== currentKey) {
+      initializedForRef.current = currentKey;
+
+      if (movementToEdit) {
+        setFecha(movementToEdit.fecha);
+        setTipo(movementToEdit.tipo);
+        setCategoria(movementToEdit.categoria);
+        setConcepto(movementToEdit.concepto);
+        setMonto(String(movementToEdit.monto));
+        setCuenta(movementToEdit.cuenta);
+        setCuentaDestino(movementToEdit.cuentaDestino || '');
+        setNotas(movementToEdit.notas || '');
+      } else {
+        setFecha(getTodayDateString());
+        setTipo(defaultType);
+        if (defaultType === 'Ingreso') {
+          setCategoria(configLists.categoriasIngreso[0] || 'Salario / Nómina');
+        } else if (defaultType === 'Gasto') {
+          setCategoria(configLists.categoriasGasto[0] || 'Alimentación y Mercado');
+        } else if (defaultType === 'Ahorro') {
+          setCategoria('Ahorro Fondo');
+        } else {
+          setCategoria('Transferencia entre cuentas');
+        }
+        setConcepto('');
+        setMonto('');
+        setCuenta(configLists.cuentas[0] || 'Nequi');
+        setCuentaDestino(configLists.cuentas[1] || 'Nu');
+        setNotas('');
       }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+    }
+  }, [isOpen, movementToEdit, defaultType, configLists]);
 
   // Adjust default category when type changes
   const handleTypeChange = (newType: MovementType) => {

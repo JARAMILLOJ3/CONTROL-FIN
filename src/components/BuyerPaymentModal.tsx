@@ -22,6 +22,16 @@ export const BuyerPaymentModal: React.FC<BuyerPaymentModalProps> = ({
   const [cuentaDestino, setCuentaDestino] = useState(configLists.cuentas[0] || 'Nu');
   const [nota, setNota] = useState('');
 
+  useEffect(() => {
+    if (isOpen) {
+      setFecha(getTodayDateString());
+      setMonto('');
+      setNota('');
+      if (configLists.metodosPago.length > 0) setMetodo(configLists.metodosPago[0]);
+      if (configLists.cuentas.length > 0) setCuentaDestino(configLists.cuentas[0]);
+    }
+  }, [isOpen]);
+
   // Cerrar modal con Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

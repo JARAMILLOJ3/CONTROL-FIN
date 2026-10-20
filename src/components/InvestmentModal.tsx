@@ -29,31 +29,43 @@ export const InvestmentModal: React.FC<InvestmentModalProps> = ({
   const [cuentaOrigen, setCuentaOrigen] = useState(configLists.cuentas[0] || 'Ahorro');
   const [notas, setNotas] = useState('');
 
+  const initializedForRef = React.useRef<string | null>(null);
+
   useEffect(() => {
-    if (investmentToEdit) {
-      setActivoProyecto(investmentToEdit.activoProyecto);
-      setTipoActivo(investmentToEdit.tipoActivo);
-      setFechaInversion(investmentToEdit.fechaInversion);
-      setFechaVencimiento(investmentToEdit.fechaVencimiento || '');
-      setMontoInvertido(String(investmentToEdit.montoInvertido));
-      setValorActual(String(investmentToEdit.valorActual));
-      setRendimientoCobrado(String(investmentToEdit.rendimientoCobrado || 0));
-      setTasaEstimada(investmentToEdit.tasaEstimada || '');
-      setEstado(investmentToEdit.estado);
-      setCuentaOrigen(investmentToEdit.cuentaOrigen || configLists.cuentas[0] || 'Ahorro');
-      setNotas(investmentToEdit.notas || '');
-    } else {
-      setActivoProyecto('');
-      setTipoActivo('CDT / Renta Fija');
-      setFechaInversion(getTodayDateString());
-      setFechaVencimiento('');
-      setMontoInvertido('');
-      setValorActual('');
-      setRendimientoCobrado('0');
-      setTasaEstimada('');
-      setEstado('Activa');
-      setCuentaOrigen(configLists.cuentas[0] || 'Ahorro');
-      setNotas('');
+    if (!isOpen) {
+      initializedForRef.current = null;
+      return;
+    }
+
+    const currentKey = investmentToEdit ? investmentToEdit.id : 'new_investment';
+    if (initializedForRef.current !== currentKey) {
+      initializedForRef.current = currentKey;
+
+      if (investmentToEdit) {
+        setActivoProyecto(investmentToEdit.activoProyecto);
+        setTipoActivo(investmentToEdit.tipoActivo);
+        setFechaInversion(investmentToEdit.fechaInversion);
+        setFechaVencimiento(investmentToEdit.fechaVencimiento || '');
+        setMontoInvertido(String(investmentToEdit.montoInvertido));
+        setValorActual(String(investmentToEdit.valorActual));
+        setRendimientoCobrado(String(investmentToEdit.rendimientoCobrado || 0));
+        setTasaEstimada(investmentToEdit.tasaEstimada || '');
+        setEstado(investmentToEdit.estado);
+        setCuentaOrigen(investmentToEdit.cuentaOrigen || configLists.cuentas[0] || 'Ahorro');
+        setNotas(investmentToEdit.notas || '');
+      } else {
+        setActivoProyecto('');
+        setTipoActivo('CDT / Renta Fija');
+        setFechaInversion(getTodayDateString());
+        setFechaVencimiento('');
+        setMontoInvertido('');
+        setValorActual('');
+        setRendimientoCobrado('0');
+        setTasaEstimada('');
+        setEstado('Activa');
+        setCuentaOrigen(configLists.cuentas[0] || 'Ahorro');
+        setNotas('');
+      }
     }
   }, [investmentToEdit, isOpen, configLists]);
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Check } from 'lucide-react';
 import { Investor } from '../types/finance';
 import { useFinance } from '../context/FinanceContext';
@@ -20,6 +20,17 @@ export const RepaymentModal: React.FC<RepaymentModalProps> = ({
   const [monto, setMonto] = useState('');
   const [cuentaOrigen, setCuentaOrigen] = useState(configLists.cuentas[0] || 'Nu');
   const [nota, setNota] = useState('');
+
+  useEffect(() => {
+    if (isOpen) {
+      setFecha(getTodayDateString());
+      setMonto('');
+      setNota('');
+      if (configLists.cuentas.length > 0) {
+        setCuentaOrigen(configLists.cuentas[0]);
+      }
+    }
+  }, [isOpen]);
 
   if (!isOpen || !investor) return null;
 

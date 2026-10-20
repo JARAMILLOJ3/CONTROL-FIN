@@ -1,6 +1,6 @@
 export function formatCurrency(amount: number | undefined | null, currencySymbol: string = '$'): string {
   if (amount === undefined || amount === null || isNaN(amount)) {
-    return `${currencySymbol}0.00`;
+    return `${currencySymbol}0`;
   }
   
   // Format with standard thousands separator and 2 decimal places if needed or clean integer

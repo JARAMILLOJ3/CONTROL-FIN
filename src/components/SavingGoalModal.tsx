@@ -36,25 +36,37 @@ export const SavingGoalModal: React.FC<SavingGoalModalProps> = ({
   const [color, setColor] = useState('#10B981');
   const [estado, setEstado] = useState<SavingGoalStatus>('En progreso');
 
+  const initializedForRef = React.useRef<string | null>(null);
+
   useEffect(() => {
-    if (goalToEdit) {
-      setNombre(goalToEdit.nombre);
-      setMotivo(goalToEdit.motivo || '');
-      setMontoObjetivo(goalToEdit.montoObjetivo ? String(goalToEdit.montoObjetivo) : '');
-      setFechaInicio(goalToEdit.fechaInicio);
-      setFechaObjetivo(goalToEdit.fechaObjetivo || '');
-      setCuentaPreferida(goalToEdit.cuentaPreferida || (accounts[0]?.nombre || ''));
-      setColor(goalToEdit.color || '#10B981');
-      setEstado(goalToEdit.estado);
-    } else {
-      setNombre('');
-      setMotivo('');
-      setMontoObjetivo('');
-      setFechaInicio(new Date().toISOString().slice(0, 10));
-      setFechaObjetivo('');
-      setCuentaPreferida(accounts[0]?.nombre || 'Nequi');
-      setColor('#10B981');
-      setEstado('En progreso');
+    if (!isOpen) {
+      initializedForRef.current = null;
+      return;
+    }
+
+    const currentKey = goalToEdit ? goalToEdit.id : 'new_goal';
+    if (initializedForRef.current !== currentKey) {
+      initializedForRef.current = currentKey;
+
+      if (goalToEdit) {
+        setNombre(goalToEdit.nombre);
+        setMotivo(goalToEdit.motivo || '');
+        setMontoObjetivo(goalToEdit.montoObjetivo ? String(goalToEdit.montoObjetivo) : '');
+        setFechaInicio(goalToEdit.fechaInicio);
+        setFechaObjetivo(goalToEdit.fechaObjetivo || '');
+        setCuentaPreferida(goalToEdit.cuentaPreferida || (accounts[0]?.nombre || ''));
+        setColor(goalToEdit.color || '#10B981');
+        setEstado(goalToEdit.estado);
+      } else {
+        setNombre('');
+        setMotivo('');
+        setMontoObjetivo('');
+        setFechaInicio(new Date().toISOString().slice(0, 10));
+        setFechaObjetivo('');
+        setCuentaPreferida(accounts[0]?.nombre || 'Nequi');
+        setColor('#10B981');
+        setEstado('En progreso');
+      }
     }
   }, [goalToEdit, isOpen, accounts]);
 
