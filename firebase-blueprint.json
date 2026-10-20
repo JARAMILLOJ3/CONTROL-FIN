@@ -1,0 +1,106 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile and metadata",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth user ID"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name"
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "User profile picture URL"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["uid", "email"]
+    },
+    "UserFinanceData": {
+      "title": "UserFinanceData",
+      "description": "User private financial records, movements, investors, buyers, debtors and investments",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owner UID"
+        },
+        "movements": {
+          "type": "array",
+          "description": "Personal movements"
+        },
+        "investors": {
+          "type": "array",
+          "description": "Investor agreements and repayments"
+        },
+        "buyerSales": {
+          "type": "array",
+          "description": "Sales to clients and payments received"
+        },
+        "debtors": {
+          "type": "array",
+          "description": "Loans to debtors and installments received"
+        },
+        "myInvestments": {
+          "type": "array",
+          "description": "Personal assets and ROI investments"
+        },
+        "savings": {
+          "type": "array",
+          "description": "Personal savings goals and contributions"
+        },
+        "debts": {
+          "type": "array",
+          "description": "Personal debts to creditors, banks and loans with payments"
+        },
+        "accounts": {
+          "type": "array",
+          "description": "Available money accounts and initial balances"
+        },
+        "configLists": {
+          "type": "object",
+          "description": "Custom categories and payment methods"
+        },
+        "profiles": {
+          "type": "array",
+          "description": "Workspaces / profiles"
+        },
+        "currentProfileId": {
+          "type": "string",
+          "description": "Currently active profile ID"
+        },
+        "currencySymbol": {
+          "type": "string",
+          "description": "Configured currency symbol"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last update ISO string"
+        }
+      },
+      "required": ["userId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User public document"
+    },
+    "/users/{userId}/finance/data": {
+      "schema": "UserFinanceData",
+      "description": "Private financial data document for the user"
+    }
+  }
+}

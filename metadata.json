@@ -1,0 +1,6 @@
+{
+  "name": "Control Financiero",
+  "description": "Plantilla integral para registrar movimientos, separar finanzas personales, inversionistas, compradores y tus propias inversiones.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
